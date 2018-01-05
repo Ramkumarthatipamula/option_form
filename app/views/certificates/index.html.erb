@@ -1,0 +1,44 @@
+<div class="row">
+  <% if !flash[:notice].blank? %>
+   <div class = "alert alert-info">
+      <%= flash[:notice] %>
+   </div>
+<% end %>
+<br /><br /><div><%= link_to "New Application", new_certificate_path, :class => "btn btn-success pull-right" %></div><br />
+  <table id="certificate_lists" class="table table-bordered table-striped">
+     <thead>.
+        <tr>
+           <th>Certificate No</th>
+           <th>Student ID</th>
+           <th>Student Name</th>
+           <th>Father Name</th>
+           <th>Mother Name</th>
+           <th>Aadher Number</th>
+           <th>Academic Year</th>
+           <th>Degree</th>
+           <th>College</th>
+           <th>Year</th>
+           <th>Download Link</th>
+           <th>Actions</th>
+        </tr>
+     </thead>
+     <tbody>
+        <% @certificates.each do |certificate| %>
+           <tr style="vertical-align: middle; text-align: center;">
+              <td style="vertical-align: middle;"><%= certificate.certificate_no %></td>
+              <td style="vertical-align: middle;"><%= certificate.student_id %></td>
+              <td style="vertical-align: middle;"><%= certificate.student_name %></td>
+              <td style="vertical-align: middle;"><%= certificate.father_name %></td>
+              <td style="vertical-align: middle;"><%= certificate.mother_name %></td>
+              <td style="vertical-align: middle;"><%= certificate.aadhar_no %></td>
+              <td style="vertical-align: middle;"><%= certificate.academic_type %></td>
+              <td style="vertical-align: middle;"><%= certificate.degree_name %></td>
+              <td style="vertical-align: middle;"><%= certificate.college_name %></td>
+              <td style="vertical-align: middle;"><%= certificate.academic_year %></td>
+              <td style="vertical-align: middle;"><%= link_to "Download Application", certificate.attachment_url,  target: "_blank" %></td>
+              <td style="vertical-align: middle;"><%= button_to "Delete",  certificate, method: :delete, class: "btn btn-danger", confirm: "Are you sure that you wish to delete application?" %></td>
+           </tr>
+        <% end %>
+     </tbody>
+  </table>
+</div>

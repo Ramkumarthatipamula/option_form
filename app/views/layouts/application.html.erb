@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>PJTSAU</title>
+    <%= yield :view_specific_css %>
+    <%= csrf_meta_tags %>
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+  <body>
+    <style>
+      .mapboxgl-popup {
+          max-width: 400px;
+          font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      }
+    </style>
+      <div class="container">
+        <div class="row">
+          <img src="<%= asset_path 'pjtsau_logo.png' %>" width="100" height="100" class="d-inline-block align-top" alt="">
+          <font class="" color="green" size="4">Professor Jayashankar Telangana State Aggricultural University(PJTSAU)</font>
+          <% if user_signed_in? %>
+            <a class="btn btn-warning pull-right" href="<%= destroy_user_session_path %>" data-method="delete">Sign out</a>
+            <button type="button" class="btn btn-primary pull-right"><%= current_user.present? ? current_user.email : '' %></button>
+          <% end %>
+        </div>
+        <%= yield %>
+        <%= yield :javascript_includes%>
+      </div>
+  </body>
+</html>

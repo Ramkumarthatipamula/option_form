@@ -1,0 +1,121 @@
+<% if !@certificate.errors.empty? %>
+   <div class = "alert alert-error">
+      <ul>
+         <% @certificate.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+         <% end %>
+      </ul>
+   </div>
+<% end %>
+
+<h3 align="center" style="color: green;">Application Form</h3><br>
+<div class="row">
+<%= form_for @certificate, html: { multipart: true } do |f| %>
+
+    <div class="form-group row field">
+      <label for="certificate_no" class="col-xs-2 col-form-label">Certificate Number</label>
+      <div class="col-xs-10">
+          <%= f.text_field :certificate_no, class: "form-control"%>
+      </div>
+    </div>
+
+    <div class="form-group row field">
+      <label for="student_id" class="col-xs-2 col-form-label">Student Id</label>
+      <div class="col-xs-10">
+        <%= f.text_field :student_id, class: "form-control"%>
+      </div>
+    </div>
+
+    <div class="form-group row field">
+      <label for="student_name" class="col-xs-2 col-form-label">Student Name</label>
+      <div class="col-xs-10">
+        <%= f.text_field :student_name, class: "form-control"%>
+      </div>
+    </div>
+
+    <div class="form-group row field">
+      <label for="father_name" class="col-xs-2 col-form-label">Father Name</label>
+      <div class="col-xs-10">
+        <%= f.text_field :father_name, class: "form-control"%>
+      </div>
+    </div>
+
+    <div class="form-group row field">
+      <label for="mother_name" class="col-xs-2 col-form-label">Mother Name</label>
+      <div class="col-xs-10">
+        <%= f.text_field :mother_name, class: "form-control"%>
+      </div>
+    </div>
+
+    <div class="form-group row field">
+      <label for="aadhar_no" class="col-xs-2 col-form-label">Aadhar Number</label>
+      <div class="col-xs-10">
+        <%= f.text_field :aadhar_no, class: "form-control"%>
+      </div>
+    </div>
+
+    <div class="form-group row field">
+      <label for="academic_type" class="col-xs-2 col-form-label">Academic Program</label>
+      <div class="col-xs-10">
+        <%= f.select(:academic_type, ['UG','PG','Diploma(2 Years)','Diploma(3 Years)'],{},{:class => "form-control", :onchange => "retrieve_courses_and_colleges_based_on_academic_type($('#certificate_academic_type').val());"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row field">
+      <label for="degree_name" class="col-xs-2 col-form-label">Degree</label>
+      <div class="col-xs-10">
+        <%= f.select(:degree_name,[],{},{:class => "form-control"}) %>
+      </div>
+    </div>
+
+    <div class="form-group row field">
+      <label for="college_name" class="col-xs-2 col-form-label">College</label>
+      <div class="col-xs-10">
+        <%= f.select(:college_name,[],{},{:class => "form-control", :prompt => 'Select'}) %>
+      </div>
+    </div>
+
+    <div class="form-group row field">
+      <label for="academic_year" class="col-xs-2 col-form-label">Academic Year</label>
+      <div class="col-xs-10">
+        <%= f.select(:academic_year,['2013-14','2014-15','2015-16','2016-17'],{},{:class => "form-control", :prompt => 'Select'}) %>
+      </div>
+    </div>
+
+    <div class="form-group row field">
+      <label for="attachment" class="col-xs-2 col-form-label">Attachment File</label>
+      <div class="col-xs-10">
+        <%= f.file_field :attachment, class: "form-control"%>
+      </div>
+    </div><br />
+    <%= link_to 'Back', root_path , :class=>"btn btn-primary" %>
+    <input type="submit" name="commit" value="Submit" class="btn btn-success pull-right" />
+  </div>
+<% end %>
+
+<% content_for :javascript_includes do %>
+  <script >
+    $(document).ready(function() {
+      retrieve_courses_and_colleges_based_on_academic_type($('select[id=certificate_academic_type]').find(":selected").val());
+    });
+
+    function retrieve_courses_and_colleges_based_on_academic_type(value) {
+      $.ajax({
+        url: "/certificates/retrieve_courses_and_colleges_based_on_academic_type",
+        data: {academic_type: value},
+        success: function(result){
+          console.log(result);
+          $('#certificate_college_name').find('option').remove();
+          $('#certificate_degree_name').find('option').remove();
+
+          $.each(result, function (i, item) {
+            console.log(i);
+            console.log(item);
+            $('#certificate_degree_name').append($('<option>'+ i +'</option>'));
+            $('#certificate_college_name').append($('<option>'+ item +'</option>'));
+          });
+        }
+      });
+    }
+  </script>
+<% end %>
