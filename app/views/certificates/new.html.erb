@@ -64,7 +64,7 @@
     <div class="form-group row field">
       <label for="degree_name" class="col-xs-2 col-form-label">Degree</label>
       <div class="col-xs-10">
-        <%= f.select(:degree_name,[],{},{:class => "form-control"}) %>
+        <%= f.select(:degree_name,[],{},{:class => "form-control", :onchange => "retrieve_colleges_based_on_degree($('#certificate_degree_name').val());"}) %>
       </div>
     </div>
 
@@ -104,15 +104,31 @@
         url: "/certificates/retrieve_courses_and_colleges_based_on_academic_type",
         data: {academic_type: value},
         success: function(result){
-          console.log(result);
+          var degree_names = new Array();
+          var college_names = new Array();
+          for (var key in result) {
+            degree_names.push(key);
+            college_names.push(result[key]);
+          }
           $('#certificate_college_name').find('option').remove();
           $('#certificate_degree_name').find('option').remove();
-
-          $.each(result, function (i, item) {
-            console.log(i);
-            console.log(item);
-            $('#certificate_degree_name').append($('<option>'+ i +'</option>'));
-            $('#certificate_college_name').append($('<option>'+ item +'</option>'));
+          $.each(degree_names, function( index, value ) {
+            $('#certificate_degree_name').append($('<option>'+ value +'</option>'));
+          });
+          $.each(college_names[0], function( index, value ) {
+            $('#certificate_college_name').append($('<option>'+ value +'</option>'));
+          });
+        }
+      });
+    }
+    function retrieve_colleges_based_on_degree(value) {
+      $.ajax({
+        url: "/certificates/retrieve_colleges_based_on_degree",
+        data: {degree_name: value},
+        success: function(result){
+          $('#certificate_college_name').find('option').remove();
+          $.each(result, function( index, value ) {
+            $('#certificate_college_name').append($('<option>'+ value +'</option>'));
           });
         }
       });

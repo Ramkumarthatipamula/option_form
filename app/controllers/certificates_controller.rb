@@ -63,7 +63,6 @@ class CertificatesController < ApplicationController
   def download
    respond_to do |format|
      format.html {
-       binding.pry
        if params[:post_id].nil?
            redirect_to :back
        else
@@ -94,7 +93,7 @@ class CertificatesController < ApplicationController
      result = { "Diploma in Agriculture" => ["Agricultural Polytechnic, Jammikunta, Karimnagar Dist.","Agricultural Polytechnic, Kampasagar, Nalgonda Dist.","Agricultural Polytechnic, Palem, Nagarkurnool Dist.","Agricultural Polytechnic, Basanthpur, Sangareddy Dist.","Agricultural Polytechnic, Warangal, Warangal Dist.","Agricultural Polytechnic, Madhira, Khammam Dist.","Agricultural Polytechnic, Sangupet, Sangareddy Dist.","Agricultural Polytechnic, Sircilla, Rajanna Sircilla Dist.","Agricultural Polytechnic, Malthumeda, Kamareddy Dist.","Mother Teresa Agricultural Polytechnic, Sathupally, Khammam Dist.","Pujya Shri Madhavanji Agricultural Polytechnic, Aware Puram, Aswaraopet, Kothagudem Dist.","Sagar Agricultural Polytechnic (FABS), Chevella, Rangareddy Dist.","Bade Kotaiah Memorial Agricultural Polytechnic, Polenigudem, Suryapet Dist.","Shiva Keshava Agricultural Polytechnic, Panchagama, Narayankhed, Sangareddy Dist.","Agricultural Polytechnic, Polasa, Jagtial Dist.", "Agricultural Polytechnic, Tornala, Siddipet Dist.", "Ratnapuri Agricultural Polytechnic, Turkala Khanapur, Sangareddy Dist.", "Dr. D.Rama Naidu Vignana Jyothi Agriculture Polytechnic, Tuniki, Medak Dist."], "Diploma in Seed Technology" => ["Seed Technology Polytechnic, Rudrur, Nizamabad Dist.", "Dr. D.Rama Naidu Vignana Jyothi Seed Technology Polytechnic, Tuniki, Medak Dist."]}
 
    elsif params[:academic_type] == "Diploma(3 Years)"
-     result = { "Diploma in Agricultural Engineering" => ["Institute of Agricultural Engineering & Technology, Rajendranagar, Hyderabad.","Dr. D. Rama Naidu Vignana Jyothi Agricultural Engineering Polytechnic, Tuniki, Medak Dist.""Mother Teresa Agricultural Engineering Polytechnic, Sathupally, Khammam Dist.","Ratnapuri Agricultural Engineering Polytechnic, Turkala Khanapur, Sangareddy Dist."]}
+     result = { "Diploma in Agricultural Engineering" => ["Institute of Agricultural Engineering & Technology, Rajendranagar, Hyderabad.","Dr. D. Rama Naidu Vignana Jyothi Agricultural Engineering Polytechnic, Tuniki, Medak Dist.","Mother Teresa Agricultural Engineering Polytechnic, Sathupally, Khammam Dist.","Ratnapuri Agricultural Engineering Polytechnic, Turkala Khanapur, Sangareddy Dist."]}
    end
 
    respond_to do |format|
@@ -102,8 +101,30 @@ class CertificatesController < ApplicationController
    end
  end
 
- def retrieve_colleges_based_on_academic_type
-
+ def retrieve_colleges_based_on_degree
+  result = case params[:degree_name]
+  when "B.Sc.(Agriculture)"
+    ["College of Agriculture, Rajendranagar, Hyderabad", "Agricultural College, Aswaraopet", "Agricultural College, Jagtial", "Agricultural College, Palem", "Agricultural College, Warangal"]
+  when "B.Sc.(CA&BM)"
+    ["College of Agriculture, Rajendranagar, Hyderabad"]
+  when "B.Sc.(Hons.) Home Science"
+    ["College of Home Science, Saifabad, Hyderabad"]
+  when "B.Sc.(Hons.) Food Science & Nutrition"
+    ["College of Home Science, Saifabad, Hyderabad"]
+  when "B.Sc.(Hons.) Fashion Technology"
+    ["College of Home Science, Saifabad, Hyderabad"]
+  when "B.Tech.(Agricultural Engineering)"
+    ["College of Agricultural Engineering, Kandi, Sangareddy"]
+  when "B.Tech.(Food Technology)"
+    ["College of Food Science and Technology, Rudrur"]
+  when "Diploma in Agriculture"
+    ["Agricultural Polytechnic, Jammikunta, Karimnagar Dist.","Agricultural Polytechnic, Kampasagar, Nalgonda Dist.","Agricultural Polytechnic, Palem, Nagarkurnool Dist.","Agricultural Polytechnic, Basanthpur, Sangareddy Dist.","Agricultural Polytechnic, Warangal, Warangal Dist.","Agricultural Polytechnic, Madhira, Khammam Dist.","Agricultural Polytechnic, Sangupet, Sangareddy Dist.","Agricultural Polytechnic, Sircilla, Rajanna Sircilla Dist.","Agricultural Polytechnic, Malthumeda, Kamareddy Dist.","Mother Teresa Agricultural Polytechnic, Sathupally, Khammam Dist.","Pujya Shri Madhavanji Agricultural Polytechnic, Aware Puram, Aswaraopet, Kothagudem Dist.","Sagar Agricultural Polytechnic (FABS), Chevella, Rangareddy Dist.","Bade Kotaiah Memorial Agricultural Polytechnic, Polenigudem, Suryapet Dist.","Shiva Keshava Agricultural Polytechnic, Panchagama, Narayankhed, Sangareddy Dist.","Agricultural Polytechnic, Polasa, Jagtial Dist.", "Agricultural Polytechnic, Tornala, Siddipet Dist.", "Ratnapuri Agricultural Polytechnic, Turkala Khanapur, Sangareddy Dist.", "Dr. D.Rama Naidu Vignana Jyothi Agriculture Polytechnic, Tuniki, Medak Dist."]
+  else
+    ["Seed Technology Polytechnic, Rudrur, Nizamabad Dist.", "Dr. D.Rama Naidu Vignana Jyothi Seed Technology Polytechnic, Tuniki, Medak Dist."]
+  end
+  respond_to do |format|
+    format.json { render json: result }
+  end
  end
 
   private
