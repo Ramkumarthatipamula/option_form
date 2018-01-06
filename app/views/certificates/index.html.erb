@@ -36,7 +36,7 @@
               <td style="vertical-align: middle;"><%= certificate.college_name %></td>
               <td style="vertical-align: middle;"><%= certificate.academic_year %></td>
               <td style="vertical-align: middle;"><%= link_to "Download Application", certificate.attachment_url,  target: "_blank" %></td>
-              <td style="vertical-align: middle;"><%= button_to "Delete",  certificate, method: :delete, class: "btn btn-danger", confirm: "Are you sure that you wish to delete application?" %></td>
+              <td style="vertical-align: middle;"><%= link_to 'Edit', edit_certificate_path(certificate.id), class: "btn btn-primary" %></td>
            </tr>
         <% end %>
      </tbody>

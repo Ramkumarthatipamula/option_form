@@ -21,8 +21,8 @@
     </style>
       <div class="container">
         <div class="row">
-          <img src="<%= asset_path 'pjtsau_logo.png' %>" width="100" height="100" class="d-inline-block align-top" alt="">
-          <font class="" color="green" size="4">Professor Jayashankar Telangana State Aggricultural University(PJTSAU)</font>
+          <center><img src="<%= asset_path 'pjtsau_logo.png' %>" width="100" height="100" class="d-inline-block align-top" alt="">
+          <font class="" color="green" size="5">Professor Jayashankar Telangana State Aggricultural University(PJTSAU)</font></center>
           <% if user_signed_in? %>
             <a class="btn btn-warning pull-right" href="<%= destroy_user_session_path %>" data-method="delete">Sign out</a>
             <button type="button" class="btn btn-primary pull-right"><%= current_user.present? ? current_user.email : '' %></button>
