@@ -1,12 +1,11 @@
+<div class="container">
 <div class="row">
   <% if !flash[:notice].blank? %>
    <div class = "alert alert-info">
       <%= flash[:notice] %>
    </div>
-<% end %>
-<br /><br /><div><%= link_to "New Application", new_certificate_path, :class => "btn btn-success pull-right" %></div><br />
-<br /></br></br><br>
-<div class="row">
+  <% end %>
+<div><%= link_to "New Application", new_certificate_path, :class => "btn btn-success pull-right" %></div>
   <div class="col-md-8 col-md-offset-3">
     <div class="form-group row field">
       <label for="user_name" class="col-xs-2 col-form-label">Academic Programe</label>
@@ -47,8 +46,6 @@
       </div>
     </div>
   </div>
-</div>
-<div>
   <table id="certificate_lists" class="table table-bordered table-striped">
      <thead>.
         <tr>
@@ -85,4 +82,5 @@
         <% end %>
      </tbody>
   </table>
+</div>
 </div>
