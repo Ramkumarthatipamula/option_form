@@ -1,6 +1,9 @@
 class CertificatesController < ApplicationController
   before_action :set_certificate, only: [:show, :edit, :edit_password, :update, :update_password, :destroy, :download]
 
+  def home_page
+
+  end
   # GET /certificates
   # GET /certificates.json
   def index
@@ -42,7 +45,7 @@ class CertificatesController < ApplicationController
     respond_to do |format|
       if @certificate.update(certificate_params)
         format.html { redirect_to root_path, notice: 'Certificate was successfully updated.' }
-        format.json { render :show, status: :ok, location: @certificate }
+        format.json { render :index, status: :ok, location: @certificate }
       else
         format.html { render :edit }
         format.json { render json: @certificate.errors, status: :unprocessable_entity }
@@ -82,17 +85,17 @@ class CertificatesController < ApplicationController
    end
  end
 
- def retrieve_courses_and_colleges_based_on_academic_type
-   if params[:academic_type] == "UG"
+ def retrieve_courses_and_colleges_based_on_academic_program
+   if params[:academic_program] == "UG"
      result = { "B.Sc.(Agriculture)" => ["College of Agriculture, Rajendranagar, Hyderabad", "Agricultural College, Aswaraopet", "Agricultural College, Jagtial", "Agricultural College, Palem", "Agricultural College, Warangal"], "B.Sc.(CA&BM)" => ["College of Agriculture, Rajendranagar, Hyderabad"], "B.Sc.(Hons.) Home Science" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Food Science & Nutrition" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Fashion Technology" => ["College of Home Science, Saifabad, Hyderabad"], "B.Tech.(Agricultural Engineering)" => ["College of Agricultural Engineering, Kandi, Sangareddy"], "B.Tech.(Food Technology)" => ["College of Food Science and Technology, Rudrur"]}
 
-   elsif params[:academic_type] == "PG"
+   elsif params[:academic_program] == "PG"
      result = []
 
-   elsif params[:academic_type] == "Diploma(2 Years)"
+   elsif params[:academic_program] == "Diploma(2 Years)"
      result = { "Diploma in Agriculture" => ["Agricultural Polytechnic, Jammikunta, Karimnagar Dist.","Agricultural Polytechnic, Kampasagar, Nalgonda Dist.","Agricultural Polytechnic, Palem, Nagarkurnool Dist.","Agricultural Polytechnic, Basanthpur, Sangareddy Dist.","Agricultural Polytechnic, Warangal, Warangal Dist.","Agricultural Polytechnic, Madhira, Khammam Dist.","Agricultural Polytechnic, Sangupet, Sangareddy Dist.","Agricultural Polytechnic, Sircilla, Rajanna Sircilla Dist.","Agricultural Polytechnic, Malthumeda, Kamareddy Dist.","Mother Teresa Agricultural Polytechnic, Sathupally, Khammam Dist.","Pujya Shri Madhavanji Agricultural Polytechnic, Aware Puram, Aswaraopet, Kothagudem Dist.","Sagar Agricultural Polytechnic (FABS), Chevella, Rangareddy Dist.","Bade Kotaiah Memorial Agricultural Polytechnic, Polenigudem, Suryapet Dist.","Shiva Keshava Agricultural Polytechnic, Panchagama, Narayankhed, Sangareddy Dist.","Agricultural Polytechnic, Polasa, Jagtial Dist.", "Agricultural Polytechnic, Tornala, Siddipet Dist.", "Ratnapuri Agricultural Polytechnic, Turkala Khanapur, Sangareddy Dist.", "Dr. D.Rama Naidu Vignana Jyothi Agriculture Polytechnic, Tuniki, Medak Dist."], "Diploma in Seed Technology" => ["Seed Technology Polytechnic, Rudrur, Nizamabad Dist.", "Dr. D.Rama Naidu Vignana Jyothi Seed Technology Polytechnic, Tuniki, Medak Dist."]}
 
-   elsif params[:academic_type] == "Diploma(3 Years)"
+   elsif params[:academic_program] == "Diploma(3 Years)"
      result = { "Diploma in Agricultural Engineering" => ["Institute of Agricultural Engineering & Technology, Rajendranagar, Hyderabad.","Dr. D. Rama Naidu Vignana Jyothi Agricultural Engineering Polytechnic, Tuniki, Medak Dist.","Mother Teresa Agricultural Engineering Polytechnic, Sathupally, Khammam Dist.","Ratnapuri Agricultural Engineering Polytechnic, Turkala Khanapur, Sangareddy Dist."]}
    end
 
@@ -130,11 +133,12 @@ class CertificatesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_certificate
+      binding.pry
       @certificate = Certificate.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def certificate_params
-      params.require(:certificate).permit(:certificate_no, :student_id, :student_name, :father_name, :mother_name, :aadhar_no, :academic_type, :degree_name, :college_name, :academic_year, :attachment)
+      params.require(:certificate).permit(:certificate_no, :student_id, :student_name, :father_name, :mother_name, :aadhar_no, :academic_program, :degree_name, :college_name, :admission_year, :attachment)
     end
 end

@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root "certificates#index"
   resources :certificates do
     collection do
-      get "/retrieve_courses_and_colleges_based_on_academic_type" => "certificates#retrieve_courses_and_colleges_based_on_academic_type"
+      get "/retrieve_courses_and_colleges_based_on_academic_program" => "certificates#retrieve_courses_and_colleges_based_on_academic_program"
       get "/retrieve_colleges_based_on_degree" => "certificates#retrieve_colleges_based_on_degree"
     end
   end

@@ -10,28 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180104130828) do
+ActiveRecord::Schema.define(version: 20180107185156) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "certificates", force: :cascade do |t|
+  create_table "certificates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "certificate_no"
+    t.string   "year_p"
+    t.string   "month_p"
+    t.string   "admission_year"
     t.string   "student_id"
     t.string   "student_name"
     t.string   "father_name"
     t.string   "mother_name"
     t.string   "aadhar_no"
-    t.string   "academic_type"
+    t.string   "academic_program"
     t.string   "degree_name"
     t.string   "college_name"
-    t.string   "academic_year"
     t.string   "attachment"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -40,8 +39,8 @@ ActiveRecord::Schema.define(version: 20180104130828) do
     t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.inet     "current_sign_in_ip"
-    t.inet     "last_sign_in_ip"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
