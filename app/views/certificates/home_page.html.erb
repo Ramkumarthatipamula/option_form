@@ -1,0 +1,96 @@
+<div class="container">
+  <div class="row">
+    <% if !flash[:notice].blank? %>
+     <div class = "alert alert-info">
+        <%= flash[:notice] %>
+     </div>
+    <% end %>
+  <div>
+    <%= link_to "New Application", new_certificate_path, :class => "btn btn-success pull-right" %>
+    <%= link_to "Full Data", certificates_path, :class => "btn btn-success pull-right" %>
+  </div>
+
+    <div class="col-md-8 col-md-offset-3">
+      <div class="form-group row field">
+        <label for="user_name" class="col-xs-2 col-form-label">Academic Programe</label>
+        <div class="col-xs-6">
+          <select class="custom-select form-control" id="certificate_academic_program" placeholder="Select any Academic Programe">
+            <option selected value="">Select any academic programe</option>
+            <option>UG</option>
+            <option>PG</option>
+            <option>Diploma(2 Years)</option>
+            <option>Diploma(3 Years)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row field">
+        <label for="user_name" class="col-xs-2 col-form-label">Select Degree</label>
+        <div class="col-xs-6">
+          <select class="custom-select form-control" id="certificate_degree_name" placeholder="Select any Degree">
+            <option selected value="">Select any degree</option></select>
+        </div>
+      </div>
+      <div class="form-group row field">
+        <label for="user_name" class="col-xs-2 col-form-label">Select College</label>
+        <div class="col-xs-6">
+          <select class="custom-select form-control" id="certificate_college_name" placeholder="Select any College">
+            <option selected value="">Select any college</option></select>
+        </div>
+      </div>
+      <div class="form-group row field">
+        <label for="user_name" class="col-xs-2 col-form-label">Select any year</label>
+        <div class="col-xs-6">
+          <select class="custom-select form-control" id="certificate_year" placeholder="Select any Year">
+            <option selected value="">Select any Year</option>
+            <option>2013-14</option>
+            <option>2014-15</option>
+            <option>2015-16</option>
+            <option>2016-17</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <table id="certificate_lists" class="table table-bordered table-striped">
+       <thead>.
+          <tr>
+             <th>Certificate No</th>
+             <th>Student ID</th>
+             <th>Student Name</th>
+             <th>Father Name</th>
+             <th>Aadhar Number</th>
+             <th>Academic Program</th>
+             <th>Degree</th>
+             <th>College</th>
+             <th>Year</th>
+             <th>Download Link</th>
+             <th>Actions</th>
+          </tr>
+       </thead>
+       <tbody>
+          <%= render 'certificates/home_page', text: "Details View", locals: {:@certificates_data => @certificate} %>
+       </tbody>
+    </table>
+  </div>
+</div>
+<% content_for :javascript_includes do %>
+<%= javascript_include_tag 'certificate' %>
+  <script>
+    $('#certificate_academic_program').change(function() {
+      value = $('#certificate_academic_program').val();
+      retrieve_courses_and_colleges_based_on_academic_program(value)
+      getCertificatesData();
+    });
+    $('#certificate_degree_name').change(function() {
+      value = $('#certificate_degree_name').val();
+      retrieve_colleges_based_on_degree(value)
+      getCertificatesData();
+    });
+    $('#certificate_college_name').change(function() {
+      getCertificatesData();
+    });
+    $('#certificate_year').change(function() {
+      getCertificatesData();
+    })
+    useDatatables();
+  </script>
+<% end %>

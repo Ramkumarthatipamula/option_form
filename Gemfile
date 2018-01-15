@@ -39,8 +39,7 @@ group :development, :test do
   gem 'selenium-webdriver'
 end
 
-gem 'mysql'
-gem 'mysql2', "~> 0.3.10"
+gem 'sqlite3'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.

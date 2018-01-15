@@ -2,7 +2,6 @@ class CertificatesController < ApplicationController
   before_action :set_certificate, only: [:show, :edit, :edit_password, :update, :update_password, :destroy, :download]
 
   def home_page
-
   end
   # GET /certificates
   # GET /certificates.json
@@ -30,7 +29,7 @@ class CertificatesController < ApplicationController
     @certificate = Certificate.new(certificate_params)
     respond_to do |format|
       if @certificate.save
-        format.html { redirect_to certificates_path, notice: 'Certificate was successfully created.' }
+        format.html { redirect_to root_path, notice: 'Certificate was successfully created.' }
         format.json { render :show, status: :created, location: @certificate }
       else
         format.html { render :new }
@@ -45,7 +44,7 @@ class CertificatesController < ApplicationController
     respond_to do |format|
       if @certificate.update(certificate_params)
         format.html { redirect_to root_path, notice: 'Certificate was successfully updated.' }
-        format.json { render :index, status: :ok, location: @certificate }
+        format.json { render root_path, status: :ok, location: @certificate }
       else
         format.html { render :edit }
         format.json { render json: @certificate.errors, status: :unprocessable_entity }
@@ -87,7 +86,7 @@ class CertificatesController < ApplicationController
 
  def retrieve_courses_and_colleges_based_on_academic_program
    if params[:academic_program] == "UG"
-     result = { "B.Sc.(Agriculture)" => ["College of Agriculture, Rajendranagar, Hyderabad", "Agricultural College, Aswaraopet", "Agricultural College, Jagtial", "Agricultural College, Palem", "Agricultural College, Warangal"], "B.Sc.(CA&BM)" => ["College of Agriculture, Rajendranagar, Hyderabad"], "B.Sc.(Hons.) Home Science" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Food Science & Nutrition" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Fashion Technology" => ["College of Home Science, Saifabad, Hyderabad"], "B.Tech.(Agricultural Engineering)" => ["College of Agricultural Engineering, Kandi, Sangareddy"], "B.Tech.(Food Technology)" => ["College of Food Science and Technology, Rudrur"]}
+     result = { "B.Sc.(Agriculture)" => ["College of Agriculture, Rajendranagar, Hyderabad", "Agricultural College, Aswaraopet", "Agricultural College, Jagtial", "Agricultural College, Palem", "Agricultural College, Warangal"], "B.Sc.(CA&BM)" => ["College of Agriculture, Rajendranagar, Hyderabad"], "B.Sc.(Hons.) Home Scinece" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Food Science & Nutrition" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Fashion Technology" => ["College of Home Science, Saifabad, Hyderabad"], "B.Tech.(Agricultural Engineering)" => ["College of Agricultural Engineering, Kandi, Sangareddy"], "B.Tech.(Food Technology)" => ["College of Food Science and Technology, Rudrur"]}
 
    elsif params[:academic_program] == "PG"
      result = []
@@ -110,7 +109,7 @@ class CertificatesController < ApplicationController
     ["College of Agriculture, Rajendranagar, Hyderabad", "Agricultural College, Aswaraopet", "Agricultural College, Jagtial", "Agricultural College, Palem", "Agricultural College, Warangal"]
   when "B.Sc.(CA&BM)"
     ["College of Agriculture, Rajendranagar, Hyderabad"]
-  when "B.Sc.(Hons.) Home Science"
+  when "B.Sc.(Hons.) Home Scinece"
     ["College of Home Science, Saifabad, Hyderabad"]
   when "B.Sc.(Hons.) Food Science & Nutrition"
     ["College of Home Science, Saifabad, Hyderabad"]
@@ -122,6 +121,8 @@ class CertificatesController < ApplicationController
     ["College of Food Science and Technology, Rudrur"]
   when "Diploma in Agriculture"
     ["Agricultural Polytechnic, Jammikunta, Karimnagar Dist.","Agricultural Polytechnic, Kampasagar, Nalgonda Dist.","Agricultural Polytechnic, Palem, Nagarkurnool Dist.","Agricultural Polytechnic, Basanthpur, Sangareddy Dist.","Agricultural Polytechnic, Warangal, Warangal Dist.","Agricultural Polytechnic, Madhira, Khammam Dist.","Agricultural Polytechnic, Sangupet, Sangareddy Dist.","Agricultural Polytechnic, Sircilla, Rajanna Sircilla Dist.","Agricultural Polytechnic, Malthumeda, Kamareddy Dist.","Mother Teresa Agricultural Polytechnic, Sathupally, Khammam Dist.","Pujya Shri Madhavanji Agricultural Polytechnic, Aware Puram, Aswaraopet, Kothagudem Dist.","Sagar Agricultural Polytechnic (FABS), Chevella, Rangareddy Dist.","Bade Kotaiah Memorial Agricultural Polytechnic, Polenigudem, Suryapet Dist.","Shiva Keshava Agricultural Polytechnic, Panchagama, Narayankhed, Sangareddy Dist.","Agricultural Polytechnic, Polasa, Jagtial Dist.", "Agricultural Polytechnic, Tornala, Siddipet Dist.", "Ratnapuri Agricultural Polytechnic, Turkala Khanapur, Sangareddy Dist.", "Dr. D.Rama Naidu Vignana Jyothi Agriculture Polytechnic, Tuniki, Medak Dist."]
+  when "Diploma in Agricultural Engineering"
+    ["Institute of Agricultural Engineering & Technology, Rajendranagar, Hyderabad.","Mother Teresa Agricultural Engineering Polytechnic, Sathupally, Khammam Dist.","Dr. D. Rama Naidu Vignana Jyothi Agricultural Engineering Polytechnic, Tuniki, Medak Dist.","Ratnapuri Agricultural Engineering Polytechnic, Turkala Khanapur, Sangareddy Dist."]
   else
     ["Seed Technology Polytechnic, Rudrur, Nizamabad Dist.", "Dr. D.Rama Naidu Vignana Jyothi Seed Technology Polytechnic, Tuniki, Medak Dist."]
   end
@@ -130,10 +131,14 @@ class CertificatesController < ApplicationController
   end
  end
 
+ def get_certificates_data
+   @certificates = Certificate.where(academic_program: params[:data_value][0], degree_name: params[:data_value][1], college_name: params[:data_value][2], admission_year: params[:data_value][3].split('-')[0])
+   render json: { certificates: render_to_string("/certificates/_home_page", layout: false, locals: {:@certificates_data => @certificates}) }
+ end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_certificate
-      binding.pry
       @certificate = Certificate.find(params[:id])
     end
 

@@ -56,21 +56,21 @@
     <div class="form-group row field">
       <label for="academic_program" class="col-xs-2 col-form-label">Academic Program</label>
       <div class="col-xs-10">
-        <%= f.select(:academic_program, ['UG','PG','Diploma(2 Years)','Diploma(3 Years)'],{prompt: '<< Select any Academic Programe >>'},{:class => "form-control", :onchange => "retrieve_courses_and_colleges_based_on_academic_program($('#certificate_academic_program').val());", required: true }) %>
+        <%= f.select(:academic_program, options_for_select(['UG','PG','Diploma(2 Years)','Diploma(3 Years)'], selected: @certificate.blank? ? "Select any Degree" : @certificate.academic_program),{prompt: '<< Select any Academic Programe >>'},{:class => "form-control", :onchange => "retrieve_courses_and_colleges_based_on_academic_program($('#certificate_academic_program').val());", required: true }) %>
       </div>
     </div>
 
     <div class="form-group row field">
       <label for="degree_name" class="col-xs-2 col-form-label">Degree</label>
       <div class="col-xs-10">
-        <%= f.select(:degree_name,[],{prompt: '<< Select any Degree >>'},{:class => "form-control", :onchange => "retrieve_colleges_based_on_degree($('#certificate_degree_name').val());", required: true }) %>
+        <%= f.select :degree_name,[@certificate.degree_name],{prompt: '<< Select any Degree >>'},{:class => "form-control", :onchange => "retrieve_colleges_based_on_degree($('#certificate_degree_name').val());", required: true } %>
       </div>
     </div>
 
     <div class="form-group row field">
       <label for="college_name" class="col-xs-2 col-form-label">College</label>
       <div class="col-xs-10">
-        <%= f.select(:college_name,[],{prompt: '<< Select any College >>'},{:class => "form-control", required: true }) %>
+        <%= f.select(:college_name,[@certificate.college_name],{prompt: '<< Select any College >>'},{:class => "form-control", required: true }) %>
       </div>
     </div>
 

@@ -1,0 +1,17 @@
+<% if @certificates.present? %>
+  <% @certificates.each do |certificate| %>
+     <tr style="vertical-align: middle; text-align: center;">
+        <td style="vertical-align: middle;"><%= certificate.certificate_no %></td>
+        <td style="vertical-align: middle;"><%= certificate.student_id %></td>
+        <td style="vertical-align: middle;"><%= certificate.student_name %></td>
+        <td style="vertical-align: middle;"><%= certificate.father_name %></td>
+        <td style="vertical-align: middle;"><%= certificate.aadhar_no %></td>
+        <td style="vertical-align: middle;"><%= certificate.academic_program %></td>
+        <td style="vertical-align: middle;"><%= certificate.degree_name %></td>
+        <td style="vertical-align: middle;"><%= certificate.college_name %></td>
+        <td style="vertical-align: middle;"><%= certificate.admission_year %></td>
+        <td style="vertical-align: middle;"><%= link_to "Download Application", certificate.attachment_url,  target: "_blank" %></td>
+        <td style="vertical-align: middle;"><%= link_to 'Edit', edit_certificate_path(certificate.id), class: "btn btn-primary" %></td>
+     </tr>
+  <% end %>
+<% end %>
