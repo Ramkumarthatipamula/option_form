@@ -109,7 +109,7 @@ class CertificatesController < ApplicationController
     ["College of Agriculture, Rajendranagar, Hyderabad", "Agricultural College, Aswaraopet", "Agricultural College, Jagtial", "Agricultural College, Palem", "Agricultural College, Warangal"]
   when "B.Sc.(CA&BM)"
     ["College of Agriculture, Rajendranagar, Hyderabad"]
-  when "B.Sc.(Hons.) Home Scinece"
+  when "B.Sc.(Hons.) Home Science"
     ["College of Home Science, Saifabad, Hyderabad"]
   when "B.Sc.(Hons.) Food Science & Nutrition"
     ["College of Home Science, Saifabad, Hyderabad"]
