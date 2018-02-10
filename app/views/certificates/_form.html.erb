@@ -1,13 +1,16 @@
-<% if !@certificate.errors.empty? %>
-   <div class = "alert alert-error">
-      <ul>
-         <% @certificate.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-         <% end %>
-      </ul>
-   </div>
-<% end %>
 
+<% if !@certificate.errors.empty? %>
+<div class = "alert alert-error">
+  <ul>
+    <% @certificate.errors.full_messages.each do |msg| %>
+    <div class = "alert alert-info">
+      <%= flash[:alert] %>
+      <li><%= msg %></li>
+    </div>
+    <% end %>
+  </ul>
+</div>
+<% end %>
 <div class="row">
 <%= form_for @certificate, html: { multipart: true } do |f| %>
 
@@ -77,7 +80,7 @@
     <div class="form-group row field">
       <label for="admission_year" class="col-xs-2 col-form-label">Academic Year</label>
       <div class="col-xs-10">
-        <%= f.select(:admission_year,['2013-14','2014-15','2015-16','2016-17'],{prompt: '<< Select any Year >>'},{:class => "form-control", :prompt => 'Select', required: true }) %>
+        <%= f.select(:admission_year,['2013','2014','2015','2016'],{prompt: '<< Select any Year >>'},{:class => "form-control", :prompt => 'Select', required: true }) %>
       </div>
     </div>
 
@@ -87,7 +90,7 @@
         <%= f.file_field :attachment, class: "form-control" %>
       </div>
     </div><br />
-    <%= link_to 'Back', root_path , :class=>"btn btn-primary" %>
+    <%= link_to 'Back', :back , :class=>"btn btn-primary" %>
     <%= f.submit "Submit", :class => 'btn btn-success pull-right' %>
   </div><br /><br />
 <% end %>

@@ -1,5 +1,5 @@
 class CertificatesController < ApplicationController
-  before_action :set_certificate, only: [:show, :edit, :edit_password, :update, :update_password, :destroy, :download]
+  before_action :set_certificate, only: [:show, :edit, :update, :update_password, :destroy, :download]
 
   def home_page
   end
@@ -86,7 +86,7 @@ class CertificatesController < ApplicationController
 
  def retrieve_courses_and_colleges_based_on_academic_program
    if params[:academic_program] == "UG"
-     result = { "B.Sc.(Agriculture)" => ["College of Agriculture, Rajendranagar, Hyderabad", "Agricultural College, Aswaraopet", "Agricultural College, Jagtial", "Agricultural College, Palem", "Agricultural College, Warangal"], "B.Sc.(CA&BM)" => ["College of Agriculture, Rajendranagar, Hyderabad"], "B.Sc.(Hons.) Home Scinece" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Food Science & Nutrition" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Fashion Technology" => ["College of Home Science, Saifabad, Hyderabad"], "B.Tech.(Agricultural Engineering)" => ["College of Agricultural Engineering, Kandi, Sangareddy"], "B.Tech.(Food Technology)" => ["College of Food Science and Technology, Rudrur"]}
+     result = { "B.Sc.(Agriculture)" => ["College of Agriculture, Rajendranagar, Hyderabad", "Agricultural College, Aswaraopet", "Agricultural College, Jagtial", "Agricultural College, Palem", "Agricultural College, Warangal"], "B.Sc.(CA&BM)" => ["College of Agriculture, Rajendranagar, Hyderabad"], "B.Sc.(Hons.) Home Science" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Food Science & Nutrition" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Fashion Technology" => ["College of Home Science, Saifabad, Hyderabad"], "B.Tech.(Agricultural Engineering)" => ["College of Agricultural Engineering, Kandi, Sangareddy"], "B.Tech.(Food Technology)" => ["College of Food Science and Technology, Rudrur"]}
 
    elsif params[:academic_program] == "PG"
      result = []
@@ -132,7 +132,8 @@ class CertificatesController < ApplicationController
  end
 
  def get_certificates_data
-   @certificates = Certificate.where(academic_program: params[:data_value][0], degree_name: params[:data_value][1], college_name: params[:data_value][2], admission_year: params[:data_value][3].split('-')[0])
+   current_user.update(academic_program: params[:data_value][0], degree_name: params[:data_value][1], college_name: params[:data_value][2], admission_year: params[:data_value][3])
+   @certificates = Certificate.where(academic_program: params[:data_value][0], degree_name: params[:data_value][1], college_name: params[:data_value][2], admission_year: params[:data_value][3])
    render json: { certificates: render_to_string("/certificates/_home_page", layout: false, locals: {:@certificates_data => @certificates}) }
  end
 

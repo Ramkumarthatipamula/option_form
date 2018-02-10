@@ -14,39 +14,43 @@
       <div class="form-group row field">
         <label for="user_name" class="col-xs-2 col-form-label">Academic Programe</label>
         <div class="col-xs-6">
-          <select class="custom-select form-control" id="certificate_academic_program" placeholder="Select any Academic Programe">
+          <%= select_tag "certificate_academic_program", options_for_select([["Select any Academic Programe",""],["UG","UG"],["PG","PG"],["Diploma(2 Years)","Diploma(2 Years)"],["Diploma(3 Years)","Diploma(3 Years)"]], selected: current_user.academic_program.present? ? current_user.academic_program : "Select any Academic Programe"),{class: "custom-select form-control"} %>
+          <!-- <select class="custom-select form-control" id="certificate_academic_program" placeholder="Select any Academic Programe">
             <option selected value="">Select any academic programe</option>
             <option>UG</option>
             <option>PG</option>
             <option>Diploma(2 Years)</option>
             <option>Diploma(3 Years)</option>
-          </select>
+          </select> -->
         </div>
       </div>
       <div class="form-group row field">
         <label for="user_name" class="col-xs-2 col-form-label">Select Degree</label>
         <div class="col-xs-6">
-          <select class="custom-select form-control" id="certificate_degree_name" placeholder="Select any Degree">
-            <option selected value="">Select any degree</option></select>
+          <%= select_tag "certificate_degree_name", options_for_select([["Select any degree",""],[current_user.degree_name,current_user.degree_name]], selected: current_user.degree_name.present? ? current_user.degree_name : ["Select any degree"]),{class: "custom-select form-control"} %>
+          <!-- <select class="custom-select form-control" id="certificate_degree_name" placeholder="Select any Degree">
+            <option selected value="">Select any degree</option></select> -->
         </div>
       </div>
       <div class="form-group row field">
         <label for="user_name" class="col-xs-2 col-form-label">Select College</label>
         <div class="col-xs-6">
-          <select class="custom-select form-control" id="certificate_college_name" placeholder="Select any College">
-            <option selected value="">Select any college</option></select>
+          <%= select_tag "certificate_college_name", options_for_select([["Select any college",""],[current_user.college_name,current_user.college_name]], selected: current_user.college_name.present? ? current_user.college_name : "Select any college"),{class: "custom-select form-control"} %>
+          <!-- <select class="custom-select form-control" id="certificate_college_name" placeholder="Select any College">
+            <option selected value="">Select any college</option></select> -->
         </div>
       </div>
       <div class="form-group row field">
         <label for="user_name" class="col-xs-2 col-form-label">Select any year</label>
         <div class="col-xs-6">
-          <select class="custom-select form-control" id="certificate_year" placeholder="Select any Year">
+          <%= select_tag "certificate_year", options_for_select([["Select any Year",""],["2013","2013"],["2014","2014"],["2015","2015"],["2016","2016"]], current_user.admission_year.present? ? current_user.admission_year : "Select any Year"),{class: "custom-select form-control"} %>
+          <!-- <select class="custom-select form-control" id="certificate_year" placeholder="Select any Year">
             <option selected value="">Select any Year</option>
             <option>2013</option>
             <option>2014</option>
             <option>2015</option>
             <option>2016</option>
-          </select>
+          </select> -->
         </div>
       </div>
     </div>
@@ -75,6 +79,28 @@
 <% content_for :javascript_includes do %>
 <%= javascript_include_tag 'certificate' %>
   <script>
+    $(document).ready(function() {
+      getCertificatesData();
+    });
+
+    // function runs an ajax call to retrieve data and add rows to datatable on list page
+    function getCertificatesData(){
+      var certificate_academic_program = $('#certificate_academic_program').val();
+      var certificate_degree_name = $('#certificate_degree_name').val();
+      var certificate_college_name = $('#certificate_college_name').val();
+      var certificate_year = $('#certificate_year').val();
+      if (!(certificate_academic_program === "")) {
+        if (!(certificate_degree_name === "")) {
+          if (!(certificate_college_name === "")) {
+            if (!(certificate_year === "")) {
+              var arr=[certificate_academic_program,certificate_degree_name,certificate_college_name,certificate_year]
+              get_certificates_data_through_ajax_cal(arr);
+            }
+          }
+        }
+      }
+    }
+
     $('#certificate_academic_program').change(function() {
       value = $('#certificate_academic_program').val();
       retrieve_courses_and_colleges_based_on_academic_program(value)

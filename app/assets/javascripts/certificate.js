@@ -37,25 +37,6 @@ function retrieve_colleges_based_on_degree(value) {
   });
 }
 
-
-// function runs an ajax call to retrieve data and add rows to datatable on list page
-function getCertificatesData(){
-  var certificate_academic_program = $('#certificate_academic_program').val();
-  var certificate_degree_name = $('#certificate_degree_name').val();
-  var certificate_college_name = $('#certificate_college_name').val();
-  var certificate_year = $('#certificate_year').val();
-  if (!(certificate_academic_program === "")) {
-    if (!(certificate_degree_name === "")) {
-      if (!(certificate_college_name === "")) {
-        if (!(certificate_year === "")) {
-          var arr=[certificate_academic_program,certificate_degree_name,certificate_college_name,certificate_year]
-          get_certificates_data_through_ajax_cal(arr);
-        }
-      }
-    }
-  }
-}
-
 function get_certificates_data_through_ajax_cal(arr) {
   $.ajax({
     type: "get",
