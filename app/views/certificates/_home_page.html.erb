@@ -10,7 +10,15 @@
         <td style="vertical-align: middle;"><%= certificate.degree_name %></td>
         <td style="vertical-align: middle;"><%= certificate.college_name %></td>
         <td style="vertical-align: middle;"><%= certificate.admission_year %></td>
+        <% if certificate.attachment.present? %>
         <td style="vertical-align: middle;"><%= link_to "Download Application", certificate.attachment_url, target: "_blank" %></td>
+        <% else %>
+          <% if file_upload(certificate) %>
+            <td style="vertical-align: middle;"><%= link_to "Download Application", certificate.attachment_url, target: "_blank" %></td>
+          <% else %>
+            <td style="vertical-align: middle;"><%= link_to "Download Application", "#", class: "notice"%></td>
+          <% end %>
+        <% end %>
         <td style="vertical-align: middle;"><%= link_to 'Edit', edit_certificate_path(certificate.id), class: "btn btn-primary" %></td>
      </tr>
   <% end %>
