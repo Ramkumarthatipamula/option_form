@@ -9,4 +9,8 @@ Rails.application.routes.draw do
       get "/get_certificates_data" => "certificates#get_certificates_data"
     end
   end
+
+  get "/dmerit/alloatment_form" => "dmerit#alloatment_form"
+  get "/dmerit/alloatment_index1" => "dmerit#alloatment_index1"
+
 end

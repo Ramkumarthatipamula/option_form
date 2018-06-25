@@ -14,5 +14,12 @@
  *= require_tree .
  *= require_self
  */
+
+ @import "fonts";
+ @import "font1";
  @import "bootstrap-sprockets";
  @import "bootstrap";
+ @import "waves";
+ @import "animate";
+ @import "style";
+ @import "all_themes";

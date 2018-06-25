@@ -1,0 +1,2 @@
+class Dseat < ApplicationRecord
+end
