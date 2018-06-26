@@ -3,138 +3,98 @@ class Dmerit < ApplicationRecord
   serialize :special, Hash
 
   def self.get_alloatment(dmerit)
-    result = {}
-    result[:details] = []
-    colleges = College.all
+    @result = {}
+    @result[:details] = []
+    @seats = Dseat.all
 
-    @a = first_test_in_govt_college
-
+    if college_seats.present?
+      college_seat_allocation = allocation(dmerit, college_seats, code)
+    end
+    @b = allocation(dmerit.gender, college_seats, code)
+    @result[:details] << @b if @b.present?
+    @seats.each do |college|
+      college_seats =  get_seats(college.code)
+      if college_seats.present?
+        college_seat_allocation = allocation(dmerit.gender, college_seats, college.code)
+        @result[:details] << college_seat_allocation if college_seat_allocation.present?
+      end
+    end
+    @result
   end
 
-  def first_test_in_govt_college
+  def self.get_seats(college_code)
+    seats = @seats.where(code: college_code).collect{|seats| [seats.oc_g, seats.oc_w] }
+    return !seats[0].blank? ? seats[0] + seats[1] : ''
+  end
 
-    College.all.each do |college|
-
-
-
-      case dmerit.caste
-        when 'A'
-          seat_govt = Dseat.where(code: "GOVT").collect{|seats| [seats.oc_g, seats.oc_w, seats.a_g, seats.a_w, seats.tot] }
-          seat_list = Dseat.where(code: college.code).collect{|seats| [seats.oc_g, seats.oc_w, seats.a_g, seats.a_w, seats.tot] }
-        when 'B'
-          seat_govt = Dseat.where(code: "GOVT").collect{|seats| [seats.oc_g, seats.oc_w, seats.b_g, seats.b_w, seats.tot] }
-          seat_list = Dseat.where(code: college.code).collect{|seats| [seats.oc_g, seats.oc_w, seats.b_g, seats.b_w, seats.tot] }
-        when 'C'
-          seat_govt = Dseat.where(code: "GOVT").collect{|seats| [seats.oc_g, seats.oc_w, seats.c_g, seats.c_w, seats.tot] }
-          seat_list = Dseat.where(code: college.code).collect{|seats| [seats.oc_g, seats.oc_w, seats.c_g, seats.c_w, seats.tot] }
-        when 'D'
-          seat_govt = Dseat.where(code: "GOVT").collect{|seats| [seats.oc_g, seats.oc_w, seats.d_g, seats.d_w, seats.tot] }
-          seat_list = Dseat.where(code: college.code).collect{|seats| [seats.oc_g, seats.oc_w, seats.d_g, seats.d_w, seats.tot] }
-        when 'E'
-          seat_govt = Dseat.where(code: "GOVT").collect{|seats| [seats.oc_g, seats.oc_w, seats.e_g, seats.e_w, seats.tot] }
-          seat_list = Dseat.where(code: college.code).collect{|seats| [seats.oc_g, seats.oc_w, seats.e_g, seats.e_w, seats.tot] }
-        when 'F'
-          seat_govt = Dseat.where(code: "GOVT").collect{|seats| [seats.oc_g, seats.oc_w, seats.f_g, seats.f_w, seats.tot] }
-          seat_list = Dseat.where(code: college.code).collect{|seats| [seats.oc_g, seats.oc_w, seats.f_g, seats.f_w, seats.tot] }
-        else
-          seat_govt = Dseat.where(code: "GOVT").collect{|seats| [seats.oc_g, seats.oc_w, seats.g_g, seats.g_w, seats.tot] }
-          seat_list = Dseat.where(code: college.code).collect{|seats| [seats.oc_g, seats.oc_w, seats.g_g, seats.g_w, seats.tot] }
+  def self.allocation(gender, college_seats, college_code)
+    if college_code=="GOVT" || college_code=="PLAP" || college_code=="JGAP" || college_code=="KPAP" || college_code=="MDAP" and college_code=="TRAP" || college_code=="JMAP" || college_code=="MTAP" || college_code=="BSAP" || college_code=="WGAP" || college_code=="SGAP"
+      if gender == "W"
+        if college_code!="JMAP" or college_code!="MTAP" or college_code!="BSAP" or college_code!="GGAP" or college_code!="GOVT"
+          if college_seats[3]>0
+            return "#{college_code}/NL/OC/W"
+            @seat_allocation = college_class
+            return @seat_allocation if seat_allocation.present
+          elsif college_seats[2]>0
+            return "#{college_code}/NL/OC/G"
+            @seat_allocation = college_class
+            return @seat_allocation if seat_allocation.present
+          end
+          if dmerit.area
+            if college_seats[1]>0
+              return "#{college_code}/OU/OC/W"
+              @seat_allocation = college_class
+              return @seat_allocation if seat_allocation.present
+            elsif college_seats[0]>0
+              return "#{college_code}/OU/OC/G"
+              @seat_allocation = college_class
+              return @seat_allocation if seat_allocation.present
+            end
+          end
+        elsif college_code!="SGAP" or college_code!="WGAP" or college_code!="GOVT"
+          if college_seats[2]>0
+            return "#{college_code}/NL/OC/G"
+            @seat_allocation = college_class
+            return @seat_allocation if seat_allocation.present
+          elsif dmerit.area
+            if college_seats[0]>0
+              return "#{college_code}/OU/OC/G"
+              @seat_allocation = college_class
+              return @seat_allocation if seat_allocation.present
+            end
+          end
         end
-      a = allocation(dmerit, seat_list)
-      result[:details] = result[:details].push(college.code + '/' + a) if a.present?
+      else
+        @seat_allocation = college_class
+        return @seat_allocation if seat_allocation.present
+      end
     end
   end
 
-
-
-
-
-  def allocation(dmerit, seat_list)
-    if seats.code=="PLAP" or seats.code=="JGAP" or seats.code=="KPAP" or seats.code=="MDAP" and seats.code=="TRAP" or seats.code=="JMAP" or seats.code=="MTAP" or seats.code=="BSAP" and seats.code=="WGAP" or seats.code=="SGAP"
-      if dmerit.gender == "W"
-        if seats.code!="JMAP" or seats.code!="MTAP" or seats.code!="BSAP" or seats.code!="GGAP" or seats.code!="GOVT"
-        if seat_govt[1][1]>0
-          return "NL/OC/W"
-
-          COLLEGE CLASS
-
-        elsif seat_govt[1][0]>0
-          return "NL/OC/G"
-
-          COLLEGE CLASS
-
+  def self.college_class
+    if dmerit.gender == "W"
+      if college_code!="JMAP" or college_code!="MTAP" or college_code!="BSAP" or college_code!="GGAP" or college_code!="GOVT"
+        if college_seats[3]>0
+          return "#{college_code}/NL/OC/W"
+        elsif college_seats[2]>0
+          return "#{college_code}/NL/OC/G"
         end
         if dmerit.area
-          if seat_govt[0][1]>0
-            return "OU/OC/W"
-
-            COLLEGE CLASS
-
-          elsif seat_govt[0][0]>0
-            return "OU/OC/G"
-
-            COLLEGE CLASS
-
+          if college_seats[1]>0
+            return "#{college_code}/OU/OC/W"
+          elsif college_seats[0]>0
+            return "#{college_code}/OU/OC/G"
           end
         end
-      end
-      elsif seats.code!="SGAP" or seats.code!="WGAP" or seats.code!="GOVT"
-        if seat_govt[4]>0
-          return "NL/OC/G"
-
-          COLLEGE CLASS
-
+      elsif college_code!="SGAP" or college_code!="WGAP" or college_code!="GOVT"
+        if college_seats[2]>0
+          return "#{college_code}/NL/OC/G"
         elsif dmerit.area
-          if seat_govt[0]>0
-            return "OU/OC/G"
-
-            COLLEGE CLASS
-
+          if college_seats[0]>0
+            return "#{college_code}/OU/OC/G"
           end
         end
-
       end
-      end
-      end
-      end
-
-
-  else
-
-    COLLEGE CLASS
-
-end
-
-
-
-
-
-
-    if dmerit.gender == "W"
-      if seats.code!="JMAP" or seats.code!="MTAP" or seats.code!="BSAP" or seats.code!="GGAP" or seats.code!="GOVT"
-      if seat_list[1][1]>0
-        return "NL/OC/W"
-      elsif seat_list[1][0]>0
-        return "NL/OC/G"
-      end
-      if dmerit.area
-        if seat_list[0][1]>0
-          return "OU/OC/W"
-        elsif seat_list[0][0]>0
-          return "OU/OC/G"
-        end
-      end
-    end
-    elsif seats.code!="SGAP" or seats.code!="WGAP" or seats.code!="GOVT"
-      if seat_list[4]>0
-        return "NL/OC/G"
-      elsif dmerit.area
-        if seat_list[0]>0
-          return "OU/OC/G"
-        end
-      end
-
     end
   end
-end
 end
