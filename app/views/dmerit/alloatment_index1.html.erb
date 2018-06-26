@@ -63,15 +63,26 @@
                     <div class="body">
                        <div class="table-responsive">
                        <table class="table table-bordered table-striped table-hover">
-                                  <thead>
-                                    <tr>
-
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                    </tr>
-                                  </tbody>
+                          <thead>
+                            <tr>
+                              <td>S NO:</td>
+                              <td>College Name</td>
+                              <td>Allotment Govt</td>
+                              <td>Allotment College</td>
+                              <td>Action</td>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% @c.each_with_index do |item, index| %>
+                              <tr>
+                                <td><%= index %></td>
+                                <td><%= item %></td>
+                                <td>----</td>
+                                <td><%= @result[:details][index] %></td>
+                                <td><input type="radio" value="selected" name = "select" id="selected_seat"></td>
+                              </tr>
+                            <% end %>
+                          </tbody>
                          </table>
                        </div>
                   </div>

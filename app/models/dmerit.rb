@@ -3,96 +3,92 @@ class Dmerit < ApplicationRecord
   serialize :special, Hash
 
   def self.get_alloatment(dmerit)
-    @result = {}
-    @result[:details] = []
-    @seats = Dseat.all
+    result = {}
+    result[:details] = []
+    result[:govt] = []
+    @allotment = []
+    seat_govt = Dseat.where(code: "GOVT").collect{|seats| [seats.oc_g, seats.oc_w] }
+    @seat_govt = seat_govt[0] + seat_govt[1]
 
-    if college_seats.present?
-      college_seat_allocation = allocation(dmerit, college_seats, code)
+    College.all.each do |college|
+      @e = Dseat.where(code: college.code).collect{|seats| [seats.oc_g, seats.oc_w] }
+      @seat_list = @e[0] + @e[1]
+      a = allocation(dmerit, @seat_list, college.code)
+      result[:details] = result[:details].push(a) if a.present?
+      result[:govt] = result[:govt].push(@seat_area) if @seat_area.present?
     end
-    @b = allocation(dmerit.gender, college_seats, code)
-    @result[:details] << @b if @b.present?
-    @seats.each do |college|
-      college_seats =  get_seats(college.code)
-      if college_seats.present?
-        college_seat_allocation = allocation(dmerit.gender, college_seats, college.code)
-        @result[:details] << college_seat_allocation if college_seat_allocation.present?
-      end
-    end
-    @result
+    return result
   end
 
-  def self.get_seats(college_code)
-    seats = @seats.where(code: college_code).collect{|seats| [seats.oc_g, seats.oc_w] }
-    return !seats[0].blank? ? seats[0] + seats[1] : ''
-  end
+  def self.allocation(dmerit, seat_list, code)
+    @dmerit = dmerit
+    @seat_list = seat_list
+    @code = code
+    if @code=="GOVT" || @code=="PLAP" || @code=="JGAP" || @code=="KPAP" || @code=="MDAP" || @code=="TRAP" || @code=="JMAP" || @code=="MTAP" || @code=="BSAP" || @code=="WAAP" || @code=="SGAP"
+      if @dmerit.gender == "W"
+        if @code!="JMAP" || @code!="MTAP" || @code!="BSAP" || @code!="GGAP" || @code!="GOVT"
+          if @seat_govt[3]>0
+            @seat_area = "NL/OC/W"
+            @c = college_class(@dmerit, @seat_list, @code)
+            return @c if @c.present?
+          elsif @seat_govt[2]>0
+            @seat_area = "NL/OC/G"
+            @c = college_class(@dmerit, @seat_list, @code)
+            return @c if @c.present?
+          end
+          if @dmerit.area
+            if @seat_govt[1]>0
+              @seat_area = "OU/OC/W"
+              @c = college_class(@dmerit, @seat_list, @code)
+              return @c if @c.present?
 
-  def self.allocation(gender, college_seats, college_code)
-    if college_code=="GOVT" || college_code=="PLAP" || college_code=="JGAP" || college_code=="KPAP" || college_code=="MDAP" and college_code=="TRAP" || college_code=="JMAP" || college_code=="MTAP" || college_code=="BSAP" || college_code=="WGAP" || college_code=="SGAP"
-      if gender == "W"
-        if college_code!="JMAP" or college_code!="MTAP" or college_code!="BSAP" or college_code!="GGAP" or college_code!="GOVT"
-          if college_seats[3]>0
-            return "#{college_code}/NL/OC/W"
-            @seat_allocation = college_class
-            return @seat_allocation if seat_allocation.present
-          elsif college_seats[2]>0
-            return "#{college_code}/NL/OC/G"
-            @seat_allocation = college_class
-            return @seat_allocation if seat_allocation.present
-          end
-          if dmerit.area
-            if college_seats[1]>0
-              return "#{college_code}/OU/OC/W"
-              @seat_allocation = college_class
-              return @seat_allocation if seat_allocation.present
-            elsif college_seats[0]>0
-              return "#{college_code}/OU/OC/G"
-              @seat_allocation = college_class
-              return @seat_allocation if seat_allocation.present
-            end
-          end
-        elsif college_code!="SGAP" or college_code!="WGAP" or college_code!="GOVT"
-          if college_seats[2]>0
-            return "#{college_code}/NL/OC/G"
-            @seat_allocation = college_class
-            return @seat_allocation if seat_allocation.present
-          elsif dmerit.area
-            if college_seats[0]>0
-              return "#{college_code}/OU/OC/G"
-              @seat_allocation = college_class
-              return @seat_allocation if seat_allocation.present
+            elsif @seat_govt[0]>0
+              @seat_area = "OU/OC/G"
+              @c = college_class(@dmerit, @seat_list, @code)
+              return @c if @c.present?
             end
           end
         end
-      else
-        @seat_allocation = college_class
-        return @seat_allocation if seat_allocation.present
+      elsif @code!="SGAP" || @code!="WAAP" || @code!="GOVT"
+        if @seat_govt[2]>0
+          @seat_area = "NL/OC/G"
+          @c = college_class(@dmerit, @seat_list, @code)
+          return @c if @c.present?
+        elsif @dmerit.area
+          if @seat_govt[0]>0
+            @seat_area = "OU/OC/G"
+            @c = college_class(@dmerit, @seat_list, @code)
+            return @c if @c.present?
+          end
+        end
       end
+    else
+      college_class(@dmerit, @seat_list, @code)
     end
   end
 
-  def self.college_class
+  def  self.college_class(dmerit, seat_list, code)
     if dmerit.gender == "W"
-      if college_code!="JMAP" or college_code!="MTAP" or college_code!="BSAP" or college_code!="GGAP" or college_code!="GOVT"
-        if college_seats[3]>0
-          return "#{college_code}/NL/OC/W"
-        elsif college_seats[2]>0
-          return "#{college_code}/NL/OC/G"
+      if code!="JMAP" || code!="MTAP" || code!="BSAP" || code!="GGAP" || code!="GOVT"
+        if seat_list[3]>0
+          return "#{code}/NL/OC/W"
+        elsif seat_list[2]>0
+          return "#{code}/NL/OC/G"
         end
         if dmerit.area
-          if college_seats[1]>0
-            return "#{college_code}/OU/OC/W"
-          elsif college_seats[0]>0
-            return "#{college_code}/OU/OC/G"
+          if seat_list[1]>0
+            return "#{code}/OU/OC/W"
+          elsif seat_list[0]>0
+            return "#{code}/OU/OC/G"
           end
         end
-      elsif college_code!="SGAP" or college_code!="WGAP" or college_code!="GOVT"
-        if college_seats[2]>0
-          return "#{college_code}/NL/OC/G"
-        elsif dmerit.area
-          if college_seats[0]>0
-            return "#{college_code}/OU/OC/G"
-          end
+      end
+    elsif code!="SGAP" || code!="WAAP" || code!="GOVT"
+      if seat_list[2]>0
+        return "#{code}/NL/OC/G"
+      elsif dmerit.area
+        if seat_list[0]>0
+          return "#{code}/OU/OC/G"
         end
       end
     end
