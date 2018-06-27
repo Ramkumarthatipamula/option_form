@@ -64,7 +64,7 @@ class Dmerit < ApplicationRecord
       return [code, @govt_seat_allocation, @c] if @c.present?
     else
       @c = college_class(dmerit, seat_list, code)
-      return [code, @govt_seat_allocation, @c] if @c.present?
+      return [code, '', @c] if @c.present?
     end
   end
 
