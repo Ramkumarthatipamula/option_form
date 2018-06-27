@@ -12,10 +12,11 @@ class DmeritController < ApplicationController
       redirect_to :controller => 'dmerit', :action => 'alloatment_form'
     end
     @result = Dmerit.get_alloatment(@dmerit)
-    @c = []
-    @result[:details].each do |a|
-      @c << a[0..3]
-    end
+    # @result[:details]
+    # @c = []
+    # @result[:details].each do |a|
+    #   @c << a[0..3]
+    # end
   end
 
   private
