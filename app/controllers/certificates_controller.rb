@@ -84,6 +84,42 @@ class CertificatesController < ApplicationController
    end
  end
 
+ def alloatment_form
+   @dmerit = Dmerit.new
+ end
+
+ def alloatment_index1
+   @dmerit = Dmerit.find_by_f_rank(params[:rank].to_i)
+   respond_to do |format|
+     if !@dmerit.present? || params[:rank] == ''
+       format.html { redirect_to alloatment_form_certificates_path, notice: 'Rank is not existed in records.' }
+       format.json { render root_path, status: :ok, location: @certificate }
+     else
+       @result = Dmerit.get_alloatment(@dmerit)
+       format.html { render alloatment_index1_certificates_path }
+       format.json { render json: @certificate.errors, status: :unprocessable_entity }
+     end
+   end
+ end
+
+ def executer_route
+   seat_alloted = params[:seat_area].downcase.split('/')
+   area = seat_alloted[1] == 'nl' ? false : true
+   category = seat_alloted[2] + "_" + seat_alloted[3]
+   dseat_record = Dseat.where(code: seat_alloted[0].upcase, area: area).first
+   if category == 'oc_g'
+    dseat_record.oc_g = dseat_record.oc_g - 1
+   elsif category == 'oc_w'
+    dseat_record.oc_w = dseat_record.oc_w - 1
+   end
+   respond_to do |format|
+     if dseat_record.save
+       format.html { render alloatment_form_certificates_path }
+       format.json { render json: @certificate.errors, status: :unprocessable_entity }
+     end
+   end
+ end
+
  def retrieve_courses_and_colleges_based_on_academic_program
    if params[:academic_program] == "UG"
      result = { "B.Sc.(Agriculture)" => ["College of Agriculture, Rajendranagar, Hyderabad", "Agricultural College, Aswaraopet", "Agricultural College, Jagtial", "Agricultural College, Palem", "Agricultural College, Warangal"], "B.Sc.(CA&BM)" => ["College of Agriculture, Rajendranagar, Hyderabad"], "B.Sc.(Hons.) Home Science" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Food Science & Nutrition" => ["College of Home Science, Saifabad, Hyderabad"], "B.Sc.(Hons.) Fashion Technology" => ["College of Home Science, Saifabad, Hyderabad"], "B.Tech.(Agricultural Engineering)" => ["College of Agricultural Engineering, Kandi, Sangareddy"], "B.Tech.(Food Technology)" => ["College of Food Science and Technology, Rudrur"]}

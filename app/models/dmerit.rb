@@ -13,7 +13,10 @@ class Dmerit < ApplicationRecord
       @e = Dseat.where(code: college.code).collect{|seats| [seats.oc_g, seats.oc_w] }
       seat_list = @e[0] + @e[1]
       a = allocation(dmerit, seat_list, college.code)
-      result[:details] << a if a.present?
+      if a.present?
+        a << college.name
+        result[:details] << a
+      end
     end
     result
   end
