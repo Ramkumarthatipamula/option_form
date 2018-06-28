@@ -96,6 +96,7 @@ class CertificatesController < ApplicationController
        format.json { render root_path, status: :ok, location: @certificate }
      else
        @result = Dmerit.get_alloatment(@dmerit)
+       @result[:dmerit] = [@dmerit.applicant_name, @dmerit.caste, @dmerit.gender, @dmerit.f_rank]
        format.html { render alloatment_index1_certificates_path }
        format.json { render json: @certificate.errors, status: :unprocessable_entity }
      end
@@ -103,18 +104,17 @@ class CertificatesController < ApplicationController
  end
 
  def executer_route
-   seat_alloted = params[:seat_area].downcase.split('/')
-   area = seat_alloted[1] == 'nl' ? false : true
-   category = seat_alloted[2] + "_" + seat_alloted[3]
-   dseat_record = Dseat.where(code: seat_alloted[0].upcase, area: area).first
-   if category == 'oc_g'
-    dseat_record.oc_g = dseat_record.oc_g - 1
-   elsif category == 'oc_w'
-    dseat_record.oc_w = dseat_record.oc_w - 1
-   end
+   area = params[:area] == 'NL' ? false : true
+   dseat_record = Dseat.where(code: params[:code], area: area).first
+    if params[:category] == 'OC_G'
+      dseat_record.oc_g = dseat_record.oc_g - 1
+    elsif params[:category] == 'OC_W'
+      dseat_record.oc_w = dseat_record.oc_w - 1
+    end
    respond_to do |format|
      if dseat_record.save
-       format.html { render alloatment_form_certificates_path }
+       Allotment.create(student_name: params[:student_name], gender: params[:gender], rank: params[:rank], college_name: params[:college_name], area: params[:area],category: params[:category], allotment: params[:allotment])
+       format.html { redirect_to alloatment_form_certificates_path }
        format.json { render json: @certificate.errors, status: :unprocessable_entity }
      end
    end

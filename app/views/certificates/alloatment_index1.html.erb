@@ -2,66 +2,48 @@
     <div class="container-fluid">
         <div class="row clearfix" >
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
-
-
-
-                <!-- second card -->
                 <div class="card" >
                     <div class="body" >
                        <div class="table-responsive">
                        <table class="table table-bordered table-striped table-hover">
-                                  <thead>
-                                    <tr>
-                                      <th >Rank</th>
-                                      <th>CGPA</th>
-                                      <th >Application No</th>
-                                      <th>Student Name</th>
-                                      <th >Category</th>
-                                      <th >Gender</th>
-                                      <th>Area</th>
-                                      <th>Allotment</th>
-                                      <th>Re Allotment</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td><%= @dmerit.f_rank  %></td>
-                                      <td><%= @dmerit.c_cgpa_r  %></td>
-                                      <td><%= @dmerit.application_number  %></td>
-                                      <td><%= @dmerit.applicant_name  %></td>
-                                      <td ><%= @dmerit.caste == 'A' ? 'BC-A': 'A' %></td>
-                                      <td><%= @dmerit.gender %></td>
-                                      <td><%= @dmerit.area == true ? 'Local' : 'Non-Local' %></td>
-                                      <td><a href='#' id='executer-button' class="btn bg-greay btn-xs waves-effect">Proceed</a></td>
-                                      <td><button type="button" class="btn bg-blue btn-xs waves-effect" data-toggle="modal" data-target="#student-info2">View</button></td>
-                                    </tr>
-                                  </tbody>
-                         </table>
-                      </div>
+                            <thead>
+                              <tr>
+                                <th >Rank</th>
+                                <th>CGPA</th>
+                                <th >Application No</th>
+                                <th>Student Name</th>
+                                <th >Category</th>
+                                <th >Gender</th>
+                                <th>Area</th>
+                                <th>Allotment</th>
+                                <th>Re Allotment</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><%= @dmerit.f_rank  %></td>
+                                <td><%= @dmerit.c_cgpa_r  %></td>
+                                <td><%= @dmerit.application_number  %></td>
+                                <td><%= @dmerit.applicant_name  %></td>
+                                <td ><%= @dmerit.caste == 'A' ? 'BC-A': 'A' %></td>
+                                <td><%= @dmerit.gender %></td>
+                                <td><%= @dmerit.area == true ? 'Local' : 'Non-Local' %></td>
+                                <td><a href='#' id='executer-button' class="btn bg-greay btn-xs waves-effect">Proceed</a></td>
+                                <td><button type="button" class="btn bg-blue btn-xs waves-effect" data-toggle="modal" data-target="#student-info2">View</button></td>
+                              </tr>
+                            </tbody>
+                       </table>
+                       </div>
                   </div>
                 </div>
-                <!-- second card1 -->
-
-
-
             </div>
         </div>
-        <!-- #END# Body Copy -->
-
-
-
-        <!-- Body Copy -->
         <div class="row clearfix" >
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top:-15px;">
-                <!-- second card -->
-                <div class="card">
-                    <div class="header">
-
-                        <h2>
-                            Available Seats - Government Colleges               </h2>
-                    </div>
+              <div class="card">
+                  <div class="header"><h2>Available Seats - Government Colleges</h2></div>
                     <div class="body">
-                       <div class="table-responsive">
+                      <div class="table-responsive">
                        <table class="table table-bordered table-striped table-hover">
                           <thead>
                             <tr>
@@ -79,28 +61,20 @@
                               <td><%= item[3] %></td>
                               <td><%= item[1] %></td>
                               <td><%= item[2] %></td>
-                              <td><input type="radio" value="<%= item[2] %>" name = "select" id="selected_seat"></td>
+                              <td><input type="radio" name="select" id="selected_seat" value="<%= item[2] + '@' + @result[:dmerit][0] + '@' + @result[:dmerit][1] + '@' + @result[:dmerit][2] + '@' + @result[:dmerit][3].to_s + '@' + item[3] %>"></td>
                             </tr>
                             <% end %>
                           </tbody>
-                         </table>
-                       </div>
-                  </div>
+                       </table>
+                      </div>
+                     </div>
                 </div>
-
-                <!-- second card1 -->
             </div>
 
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top:-15px;">
-                <!-- second card -->
                 <div class="card">
-                    <div class="header">
-
-                        <h2>Available Seats - Private Colleges </h2>
-                  </div>
-               <div class="body">
-
-
+                    <div class="header"><h2>Available Seats - Private Colleges </h2></div>
+                    <div class="body">
                        <div class="table-responsive">
                          <table class="table table-bordered table-striped table-hover">
                            <thead>
@@ -114,31 +88,38 @@
                        </div>
                   </div>
                 </div>
-
-                <!-- second card1 -->
             </div>
+        </div>
+      </div>
+</div>
 
-
-        </div>
-        </div>
-        </div>
 <script>
-  var callExecuter=function(){
-    var a = $('input[name=select]:checked').val();
-    console.log("--------------------");
-    console.log(a);
-    console.log("--------------------");
-  $.ajax({
-    type:'GET',
-    url:'/certificates/executer_route',
-    data: { seat_area : a },
-  success:function(){
-  //I assume you want to do something on controller action execution success?
-  $(this).addClass('done');
-  }
-  });
-  }
-
-  $(document).on("click","#executer-button",callExecuter);
+    $('#executer-button').click(function(){
+      var isChecked = $('#selected_seat').attr('checked')?true:false;
+      var a = $('input[name=select]:checked').val();
+console.log(a);
+      console.log(isChecked);
+      if (a!=undefined) {
+        var a = $('input[name=select]:checked').val();
+        console.log("--------------------");
+        console.log(a);
+        var b = a.split('@');
+        console.log(b);
+        var c = b[1].split('/');
+        console.log(c);
+        console.log("--------------------");
+        $.ajax({
+          type:'POST',
+          dataType: 'script',
+          url:'/executer_route',
+          data: { code: b[0], allotment: b[1], area: c[0], category: c[1]+'_'+c[2], student_name: b[2], caste: b[3], gender: b[4], rank: b[5], college_name: b[6] },
+            success:function(){
+              $(this).addClass('done');
+            }
+          });
+      }
+      else {
+        console.log("Select any college");
+      }
+    })
 </script>
-        <!-- #END# Body Copy -->

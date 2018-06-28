@@ -75,24 +75,24 @@ class Dmerit < ApplicationRecord
     if dmerit.gender == "W"
       if code!="JMAP" || code!="MTAP" || code!="BSAP" || code!="GGAP" || code!="GOVT"
         if seat_list[3]>0
-          return "#{code}/NL/OC/W"
+          return "#{code}@NL/OC/W"
         elsif seat_list[2]>0
-          return "#{code}/NL/OC/G"
+          return "#{code}@NL/OC/G"
         end
         if dmerit.area
           if seat_list[1]>0
-            return "#{code}/OU/OC/W"
+            return "#{code}@OU/OC/W"
           elsif seat_list[0]>0
-            return "#{code}/OU/OC/G"
+            return "#{code}@OU/OC/G"
           end
         end
       end
     elsif code!="SGAP" || code!="WAAP" || code!="GOVT"
       if seat_list[2]>0
-        return "#{code}/NL/OC/G"
+        return "#{code}@NL/OC/G"
       elsif dmerit.area
         if seat_list[0]>0
-          return "#{code}/OU/OC/G"
+          return "#{code}@OU/OC/G"
         end
       end
     end

@@ -59,4 +59,4 @@ gem 'carrierwave', '~> 1.0'
 
 gem 'pry-rails', :group => :development
 
-ruby "2.3.1"
+ruby "2.5.1"

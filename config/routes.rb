@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       get "/get_certificates_data" => "certificates#get_certificates_data"
       get "/alloatment_form" => "certificates#alloatment_form"
       get "/alloatment_index1" => "certificates#alloatment_index1"
-      post "/executer_route" => "certificates#executer_route"
     end
   end
+  post "/executer_route" => "certificates#executer_route"
 end
